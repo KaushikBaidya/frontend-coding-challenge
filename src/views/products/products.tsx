@@ -21,6 +21,7 @@ export const Products: React.FC = () => {
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
+
 	useEffect(() => {
 		const productId = searchParams.get("product");
 		if (productId) {
@@ -28,6 +29,8 @@ export const Products: React.FC = () => {
 			if (product) {
 				setSelectedProduct(product);
 			}
+		} else {
+			setSelectedProduct(null); // Reset if there's no product in query string
 		}
 	}, [searchParams]);
 
@@ -41,7 +44,7 @@ export const Products: React.FC = () => {
 
 	const handleCloseModal = useCallback(() => {
 		setSelectedProduct(null);
-		router.push("/products", undefined);
+		router.push("/products", undefined); // Clear the query when closing modal
 	}, [router]);
 
 	return (
