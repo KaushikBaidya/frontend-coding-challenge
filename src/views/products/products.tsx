@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, Suspense } from "react";
 import { Product } from "@/types";
 import { ProductModal } from "@/views/products/productModal/productModal";
 import { BackToHome } from "@/components/backToHome/backToHome";
@@ -30,7 +30,7 @@ export const Products: React.FC = () => {
 				setSelectedProduct(product);
 			}
 		} else {
-			setSelectedProduct(null); // Reset if there's no product in query string
+			setSelectedProduct(null);
 		}
 	}, [searchParams]);
 
@@ -44,22 +44,27 @@ export const Products: React.FC = () => {
 
 	const handleCloseModal = useCallback(() => {
 		setSelectedProduct(null);
-		router.push("/products", undefined); // Clear the query when closing modal
+		router.push("/products", undefined);
 	}, [router]);
 
 	return (
-		<div>
-			<BackToHome />
-			<ProductList products={paginatedProducts} onOpenModal={handleOpenModal} />
-			<div className="h-4" />
-			<PaginationControls
-				currentPage={currentPage}
-				totalPages={totalPages}
-				onPageChange={handlePageChange}
-			/>
-			{selectedProduct && (
-				<ProductModal product={selectedProduct} onClose={handleCloseModal} />
-			)}
-		</div>
+		<Suspense fallback={<div>Loading...</div>}>
+			<div>
+				<BackToHome />
+				<ProductList
+					products={paginatedProducts}
+					onOpenModal={handleOpenModal}
+				/>
+				<div className="h-4" />
+				<PaginationControls
+					currentPage={currentPage}
+					totalPages={totalPages}
+					onPageChange={handlePageChange}
+				/>
+				{selectedProduct && (
+					<ProductModal product={selectedProduct} onClose={handleCloseModal} />
+				)}
+			</div>
+		</Suspense>
 	);
 };
