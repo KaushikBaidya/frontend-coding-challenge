@@ -1,8 +1,11 @@
 /** @type {import('postcss-load-config').Config} */
 const config = {
-  plugins: {
-    tailwindcss: {},
-  },
+	experimental: {
+		missingSuspenseWithCSRBailout: false,
+	},
+	plugins: {
+		tailwindcss: {},
+	},
 };
 
 export default config;
